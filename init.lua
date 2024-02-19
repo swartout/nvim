@@ -200,9 +200,7 @@ require('lazy').setup({
     },
   },
 
-  {
-    'projekt0n/github-nvim-theme',
-  },
+  'projekt0n/github-nvim-theme',
 
   {
     -- Set lualine as statusline
@@ -269,6 +267,9 @@ require('lazy').setup({
 -- [[ Setting options ]]
 -- See `:help vim.o`
 -- NOTE: You can change these options as you wish!
+
+-- set relative number
+vim.o.relativenumber = true
 
 -- Set highlight on search
 vim.o.hlsearch = false
