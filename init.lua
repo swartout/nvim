@@ -201,17 +201,7 @@ require('lazy').setup({
   },
 
   {
-    -- Theme inspired by Atom
-    'navarasu/onedark.nvim',
-    priority = 1000,
-    lazy = false,
-    config = function()
-      require('onedark').setup {
-        -- Set a style preset. 'dark' is default.
-        style = 'dark', -- dark, darker, cool, deep, warm, warmer, light
-      }
-      require('onedark').load()
-    end,
+    'projekt0n/github-nvim-theme',
   },
 
   {
@@ -679,6 +669,9 @@ cmp.setup {
     { name = 'path' },
   },
 }
+
+-- set theme
+vim.cmd('colorscheme github_dark_colorblind')
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
