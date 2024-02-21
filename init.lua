@@ -331,6 +331,9 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnos
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
+-- limit number of floating suggestions
+vim.opt.pumheight = 5
+
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
@@ -513,6 +516,15 @@ local on_attach = function(_, bufnr)
     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
   end
 
+  -- same func, but for insert
+  local imap = function(keys, func, desc)
+    if desc then
+      desc = 'LSP: ' .. desc
+    end
+
+    vim.keymap.set('i', keys, func, { buffer = bufnr, desc = desc })
+  end
+
   nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
   nmap('<leader>ca', function()
     vim.lsp.buf.code_action { context = { only = { 'quickfix', 'refactor', 'source' } } }
@@ -526,9 +538,10 @@ local on_attach = function(_, bufnr)
   nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 
   -- See `:help K` for why this keymap
-  -- changed to M
-  nmap('M', vim.lsp.buf.hover, 'Hover Documentation')
-  nmap('<C-m>', vim.lsp.buf.signature_help, 'Signature Documentation')
+  -- changed to t
+  nmap('T', vim.lsp.buf.hover, 'Hover Documentation')
+  nmap('<C-t>', vim.lsp.buf.signature_help, 'Signature Documentation')
+  imap('<C-t>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
   -- Lesser used LSP functionality
   nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
@@ -579,7 +592,7 @@ local servers = {
   -- clangd = {},
   -- gopls = {},
   pyright = {},
-  -- rust_analyzer = {},
+  rust_analyzer = {},
   -- tsserver = {},
   -- html = { filetypes = { 'html', 'twig', 'hbs'} },
 
@@ -672,6 +685,14 @@ cmp.setup {
 
 -- set theme
 vim.cmd('colorscheme github_dark_colorblind')
+
+-- add automatic formatting on save for certain files
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = {"*.py", "*.rs"},  -- List the filetypes you want, e.g., Python and JavaScript files
+  callback = function()
+    vim.lsp.buf.format()
+  end,
+})
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
