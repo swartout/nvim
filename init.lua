@@ -123,6 +123,7 @@ require('lazy').setup({
     },
   },
 
+
   -- Useful plugin to show you pending keybinds.
   { 'folke/which-key.nvim',  opts = {} },
   {
@@ -248,6 +249,10 @@ require('lazy').setup({
   },
 
   {
+    'lervag/vimtex',
+  },
+
+  {
     -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
@@ -332,7 +337,7 @@ vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open float
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
 -- limit number of floating suggestions
-vim.opt.pumheight = 5
+vim.opt.pumheight = 10
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
@@ -638,6 +643,9 @@ local luasnip = require 'luasnip'
 require('luasnip.loaders.from_vscode').lazy_load()
 luasnip.config.setup {}
 
+-- Load snippets from ~/.config/nvim/LuaSnip/
+require("luasnip.loaders.from_lua").load({paths = {"~/.config/nvim/LuaSnip/"}})
+
 cmp.setup {
   snippet = {
     expand = function(args)
@@ -684,7 +692,7 @@ cmp.setup {
 }
 
 -- set theme
-vim.cmd('colorscheme github_dark_colorblind')
+vim.cmd('colorscheme github_dark_default')
 
 -- add automatic formatting on save for certain files
 vim.api.nvim_create_autocmd("BufWritePre", {
@@ -693,6 +701,31 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     vim.lsp.buf.format()
   end,
 })
+
+-- add utf encoding
+vim.opt.encoding = 'utf-8'
+
+-- enable Zathura for VimTex viewing
+vim.g.vimtex_view_method = 'zathura'
+
+-- silence vimtex warnings
+vim.g.vimtex_quickfix_ignore_filters = {
+    'Underfull',
+    'Overfull',
+}
+
+-- toggle conceal level
+_G.toggleConcealLevel = function()
+    if vim.wo.conceallevel == 0 then
+        vim.wo.conceallevel = 2
+    else
+        vim.wo.conceallevel = 0
+    end
+end
+
+-- Map the toggle function to "localleader lu"
+vim.api.nvim_set_keymap('n', vim.g.maplocalleader .. 'lu', ':lua toggleConcealLevel()<CR>', {noremap = true, silent = true})
+
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
