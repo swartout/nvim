@@ -727,8 +727,8 @@ end
 vim.api.nvim_set_keymap('n', vim.g.maplocalleader .. 'lu', ':lua toggleConcealLevel()<CR>', {noremap = true, silent = true})
 
 
--- define "py" to run python file
-vim.api.nvim_create_user_command('py', function()
+-- define "Py" to run python file
+vim.api.nvim_create_user_command('Py', function()
   vim.cmd('!python ' .. vim.fn.shellescape(vim.fn.expand('%')))
 end, {})
 
