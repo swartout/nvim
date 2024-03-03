@@ -727,5 +727,11 @@ end
 vim.api.nvim_set_keymap('n', vim.g.maplocalleader .. 'lu', ':lua toggleConcealLevel()<CR>', {noremap = true, silent = true})
 
 
+-- define "py" to run python file
+vim.api.nvim_create_user_command('py', function()
+  vim.cmd('!python ' .. vim.fn.shellescape(vim.fn.expand('%')))
+end, {})
+
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
