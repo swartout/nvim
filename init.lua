@@ -253,6 +253,15 @@ require('lazy').setup({
   },
 
   {
+    'fpeterek/nvim-surfers',
+    config = function()
+      require('nvim-surfers').setup({
+        use_tmux = true,
+      })
+    end
+  },
+
+  {
     -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
